@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 import { OrderStatus } from '@duc.q/common';
 import { TicketDoc } from './ticket';
 
@@ -53,4 +53,4 @@ orderSchema.statics.build = (attrs: OrderAttrs) => {
 
 const Order = mongoose.model<OrderDoc, OrderModel>('Order', orderSchema);
 
-export { Order };
+export { OrderStatus, Order };
