@@ -1,32 +1,57 @@
 import request from 'supertest';
 import { app } from '../../app';
-import mongoose from 'mongoose';
+import { Ticket } from '../../models/ticket';
 
-it('returns a 404 if the ticket is not found', async () => {
-  const id = new mongoose.Types.ObjectId().toHexString();
-  await request(app)
-    .get(`/api/tickets/${id}`)
-    .send()
-    .expect(404);
-});
+it('fetches the order', async () => {
+  // Create a ticket
+  const ticket = Ticket.build({
+    price: 30,
+    title: "Happy day"
+  })
+  await ticket.save();
 
-it('returns a ticket if the ticket is not found', async () => {
-  const title = 'concert',
-    price = 20;
-
-  const response = await request(app)
-    .post('/api/tickets')
-    .set('Cookie', global.signin())
+  const user = global.signin();
+  // Make a request to build an order with this ticket
+  const { body: order } = await request(app)
+    .post('/api/orders')
+    .set('Cookie', user)
     .send({
-      title, price
+      ticketId: ticket.id
     })
     .expect(201);
 
-  const ticketResponse = await request(app)
-    .get(`/api/tickets/${response.body.id}`)
+  // Make request to fetch the order
+  const { body: fetchedOrder } = await request(app)
+    .get(`/api/orders/${order.id}`)
+    .set('Cookie', user)
     .send()
     .expect(200);
+  expect(fetchedOrder.id).toEqual(order.id);
+});
 
-  expect(ticketResponse.body.title).toEqual(title);
-  expect(ticketResponse.body.price).toEqual(price);
+
+it('returns an error if one user tries to fetch orders from another user', async () => {
+  // Create a ticket
+  const ticket = Ticket.build({
+    price: 30,
+    title: "Happy day"
+  })
+  await ticket.save();
+
+  const user = global.signin();
+  // Make a request to build an order with this ticket
+  const { body: order } = await request(app)
+    .post('/api/orders')
+    .set('Cookie', user)
+    .send({
+      ticketId: ticket.id
+    })
+    .expect(201);
+
+  // Make request to fetch the order
+  await request(app)
+    .get(`/api/orders/${order.id}`)
+    .set('Cookie', global.signin())
+    .send()
+    .expect(401);
 });

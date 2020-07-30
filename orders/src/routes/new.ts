@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
-import { requireAuth, validateRequest, NotFoundError, OrderStatus, BadRequestError } from "@duc.q/common";
+import { requireAuth, validateRequest, NotFoundError, BadRequestError } from "@duc.q/common";
 import { Ticket } from "../models/ticket";
-import { Order } from '../models/order';
+import { Order, OrderStatus } from '../models/order';
 
 const router = express.Router();
 const EXPIRATION_WINDOW_SECONDS = 15*60;
