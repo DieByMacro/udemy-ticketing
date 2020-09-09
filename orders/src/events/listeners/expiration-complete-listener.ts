@@ -19,6 +19,7 @@ export class ExpirationCompleteListener extends Listener<ExpirationCompleteEvent
       status: OrderStatus.Cancelled,
     });
 
+    console.log(`ExpirationCompleteListener -> onMessage -> order`, order)
     if (order.status === OrderStatus.Complete) {
       return msg.ack();
     }
