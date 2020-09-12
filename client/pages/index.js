@@ -6,7 +6,6 @@ const LandingPage = ({ currentUser }) => {
 
 // Page context = { req, res }
 LandingPage.getInitialProps = async (context, client, currentUser) => {
-  console.log(`LandingPage.getInitialProps -> currentUser`, currentUser)
   return {}
 };
 

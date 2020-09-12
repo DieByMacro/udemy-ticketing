@@ -55,6 +55,7 @@ const NewTicket = () => {
             className="form-control"
           />
         </div>
+        {errors}
         <button className="btn btn-primary">Submit</button>
       </form>
     </div>
