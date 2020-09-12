@@ -14,6 +14,9 @@ declare global {
 
 jest.mock('../nats-wrapper');
 
+// Maker sure Stripe key always load first in `stripe` from src folder
+process.env.STRIPE_KEY = "sk_test_pkbF5p8p3iFn7I87i94S0d03";
+
 let mongo: any;
 beforeAll(async () => {
   process.env.JWT_KEY = 'asdf';
