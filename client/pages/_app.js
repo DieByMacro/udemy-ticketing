@@ -6,7 +6,9 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
   return (
     <div>
       <Header currentUser={currentUser} />
-      <Component {...pageProps} />
+      <div className="container">
+        <Component currentUser={currentUser} {...pageProps} />
+      </div>
     </div>
   )
 };
@@ -17,12 +19,14 @@ AppComponent.getInitialProps = async ({Component, ctx}) => {
 
   const client = buildClient(ctx);
   const { data } = await client.get('/api/users/currentuser');
+  console.log(`AppComponent.getInitialProps -> data`, data)
 
   let pageProps = {};
 
   if (Component.getInitialProps) {
     // Running getInitialProps on LandingPage comp
-    pageProps = await Component.getInitialProps(ctx)
+    // Make axios client, current User data available in every Component getInialProps
+    pageProps = await Component.getInitialProps(ctx, client, data.currentUser)
   }
 
   console.log("AppComponent.getInitialProps -> pageProps", pageProps)
