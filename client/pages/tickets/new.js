@@ -23,7 +23,6 @@ const NewTicket = () => {
       price,
     },
     onSuccess: (data) => {
-      // console.log('>>: ', data);
       Router.push('/')
     }
   });

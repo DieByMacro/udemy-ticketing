@@ -12,7 +12,6 @@ const OrderShow = ({ order, currentUser }) => {
       orderId: order.id,
     },
     onSuccess: payment => {
-      // console.log(payment);
       Router.push('/orders')
     }
   })
